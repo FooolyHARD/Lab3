@@ -1,4 +1,11 @@
 /*
+Деньги спрятаны в автомобильных шинах. Проверьте немедленно. Это обычная уловка бандитов.
+Ваш искренний доброжелатель Брехсон.
+Было ещё и такое письмо:
+Деньги стибрили сами полицейские. Это говорю вам точно.
+----------------------------
+*/
+/*
 Читатель Сарданапал. Сообщенные читателями сведения оказались весьма ценными для полиции,
 которая тут же приняла ряд необходимых мер. Во-первых, был арестован
 банковский кассир, и, хотя он клялся, что денег не похищал, полицейский комиссар Пшигль сказал,
@@ -9,43 +16,92 @@
  */
 //StoryTale.java
 
-import com.story.*;
-
+import com.story.Entites.*;
+import com.story.Interface.ContainerOfARgs;
+import com.story.Interface.NotALive;
+import com.story.Exceptions.*;
 public class StoryTale{
+    static class Robers extends humanGruop{
+        public ContainerOfARgs getNameARg(){
+            class PersonGetName implements ContainerOfARgs{
+                final String name = Robers.this.name;
+                @Override
+                public String getName(){
+                    return this.name;
+                }
+            }
+            return new PersonGetName();
+        }
+        public Robers(final String name, final State state) {
+            super(name, state);
+        }
+        @Override
+        public void watch(){
+            System.out.println(this.name+" с ухмылкой смотрят со стороны");
+        }
+        public void run() {System.out.println(this.name+" бегут со всех ног");}
+    }
     public static void main(String[] args){
+        Robers robers = new Robers("грабители", State.ACTIVE);
+        ContainerOfARgs name = robers.getNameARg();
+        NotALive pupa = new lupa("lol");
+        Auto auto = new Auto("Автомобиль", State.DIDNTFIND);
+        Entity money = new Entity("Валюта", State.DIDNTFIND){
+            @Override
+            public void setState(State state) {
+                this.state = state;
+            }
+            public void vaporize(){
+                this.state = State.DIDNTFIND;
+            }
+        };
+        String Cops = new String("Менты");
+        String Bankers = new String("Банковский кассир");
+        String House = new String("Дом №47 по кривой улице");
+        String bagnon = new String("Чемодан");
         Story coolstory = new Story("Кулстори");
         Readers readers = new Readers("Читатели",State.ACTIVE);
-        Policements policements = new Policements("Менты", State.ACTIVE);
+        Policements policements = new Policements(Cops, State.ACTIVE);
         Bankir bankir = null;
+        Cat cat = new Cat("Кот", State.DEAD);
+        Bag bag = new Bag(bagnon, State.DIDNTFIND);
+        com.story.Entites.House house = new House(House, State.STAY);
+        Invparts part = new Invparts(null);
         final double max = 2.;
         if (((Math.random()))>0.5){
-            bankir = new Bankir("Банковский кассир", State.ACTIVE);
+            bankir = new Bankir(Bankers, State.ACTIVE);
         } else {
-            bankir = new Bankir("Банковский кассир", State.GUILTY);
+            bankir = new Bankir(Bankers, State.GUILTY);
         }
-        //Bankir bankir = new Bankir("Банковский кассир", State.GUILTY);
-        Cat cat = new Cat("Кот", State.DEAD);
-        Bag bag = new Bag("Чемодан", State.DIDNTFIND);
-        House house = new House("Дом №47 по кривой улице", State.STAY);
+
+        robers.watch();
         coolstory.start();
-        readers.say("Ментам", "Очен важные сведения");
-        policements.startInv(0);
+        readers.say(Cops, "*Письмо*Деньги спрятаны в автомобильных шинах. Проверьте немедленно. Это обычная уловка бандитов.");
+        policements.tryToFind(money.getName(), "везде");
+        try {
+            policements.tryToFindCar(auto, "Везде");
+            policements.tryToFind("Шины", "машина");
+        } catch (CarNotFoundException e){
+            System.out.println(e.getMessage());
+        }
+        readers.say(Cops, "Очень важные сведения");
+        part.start(Part.FIRST);
         readers.watch();
-        policements.catchs("Банковский кассир");
-        bankir.say("Ментам ", "Нет, это не я!");
-        policements.bonk("Банковский кассир");
+        policements.catchs(Bankers);
+        bankir.say(Cops, "Нет, это не я!");
+        policements.bonk(Bankers);
         if (bankir.getState()==State.GUILTY){
-            bankir.say("Ментам ", "Ладно...Вы меня расскусили");
-            policements.take("Банковский кассир");
+            bankir.say(Cops, "Ладно...Вы меня раскусили");
+            policements.take(Bankers);
             policements.win();
             coolstory.end();
         } else {
-            policements.arrest("Банковский кассир", "Чемодан не найден");
-            policements.startInv(1);
-            policements.tryToFind("Чемодан", "Дворы и полисадники");
-            policements.startInv(2);
+            policements.arrest(Bankers, bagnon+" не найден");
+            part.start(Part.SECOND);
+            policements.tryToFind(bagnon, "Дворы и пaлисадники");
+            part.start(Part.THERD);
             //policements.tryToFind("Чемодан", "Дом №47 по кривой улице");
-            if ((policements.tryToFind("Чемодан", "Дом №47 по кривой улице")) == "Найдено") {
+            if ((policements.tryToFind(bagnon, House)) == "Найдено") {
                 bag.setState(State.FIND);
                 policements.win();
                 coolstory.end();
@@ -55,8 +111,10 @@ public class StoryTale{
                 house.setState(State.FALL);
                 house.fall();
                 policements.lose();
+                System.out.println(robers.getName()+" унесли все денбги ");
                 coolstory.end();
             }
+
         }
     }
 }
