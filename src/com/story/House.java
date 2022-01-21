@@ -11,4 +11,8 @@ public class House extends Entity implements NotALive{
     public void fall(){
         System.out.println(name+" упал из-за изенения почвы");
     }
+    @Override
+    public void setState(State state){
+        this.state = state;
+    }
 }

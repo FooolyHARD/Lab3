@@ -11,41 +11,49 @@
 
 import com.story.*;
 
+
 public class StoryTale{
     public static void main(String[] args){
+        NotALive pupa = new lupa("lol");
+        pupa.exist();
+        String Cops = new String("Менты");
+        String Bankers = new String("Банковский кассир");
+        String House = new String("Дом №47 по кривой улице");
+        String bagnon = new String("Чемодан");
         Story coolstory = new Story("Кулстори");
         Readers readers = new Readers("Читатели",State.ACTIVE);
-        Policements policements = new Policements("Менты", State.ACTIVE);
+        Policements policements = new Policements(Cops, State.ACTIVE);
         Bankir bankir = null;
         final double max = 2.;
         if (((Math.random()))>0.5){
-            bankir = new Bankir("Банковский кассир", State.ACTIVE);
+            bankir = new Bankir(Bankers, State.ACTIVE);
         } else {
-            bankir = new Bankir("Банковский кассир", State.GUILTY);
+            bankir = new Bankir(Bankers, State.GUILTY);
         }
         //Bankir bankir = new Bankir("Банковский кассир", State.GUILTY);
         Cat cat = new Cat("Кот", State.DEAD);
-        Bag bag = new Bag("Чемодан", State.DIDNTFIND);
-        House house = new House("Дом №47 по кривой улице", State.STAY);
+        Bag bag = new Bag(bagnon, State.DIDNTFIND);
+        House house = new House(House, State.STAY);
+        Invparts part = new Invparts(null);
         coolstory.start();
-        readers.say("Ментам", "Очен важные сведения");
-        policements.startInv(0);
+        readers.say(Cops, "Очень важные сведения");
+        part.start(Part.FIRST);
         readers.watch();
-        policements.catchs("Банковский кассир");
-        bankir.say("Ментам ", "Нет, это не я!");
-        policements.bonk("Банковский кассир");
+        policements.catchs(Bankers);
+        bankir.say(Cops, "Нет, это не я!");
+        policements.bonk(Bankers);
         if (bankir.getState()==State.GUILTY){
-            bankir.say("Ментам ", "Ладно...Вы меня расскусили");
-            policements.take("Банковский кассир");
+            bankir.say(Cops, "Ладно...Вы меня раскусили");
+            policements.take(Bankers);
             policements.win();
             coolstory.end();
         } else {
-            policements.arrest("Банковский кассир", "Чемодан не найден");
-            policements.startInv(1);
-            policements.tryToFind("Чемодан", "Дворы и полисадники");
-            policements.startInv(2);
+            policements.arrest(Bankers, bagnon+" не найден");
+            part.start(Part.SECOND);
+            policements.tryToFind(bagnon, "Дворы и пaлисадники");
+            part.start(Part.THERD);
             //policements.tryToFind("Чемодан", "Дом №47 по кривой улице");
-            if ((policements.tryToFind("Чемодан", "Дом №47 по кривой улице")) == "Найдено") {
+            if ((policements.tryToFind(bagnon, House)) == "Найдено") {
                 bag.setState(State.FIND);
                 policements.win();
                 coolstory.end();

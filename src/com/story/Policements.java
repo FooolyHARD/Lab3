@@ -6,16 +6,7 @@ public class Policements extends humanGruop{
     public Policements(String name, State state){
         super(name, state);
     }
-    public void startInv(int number){
-        switch (number){
-            case 0: System.out.println(this.name+" начали первый этап расследования");
-                break;
-            case 1: System.out.println(this.name+" продолжают расследование");
-                break;
-            case 2: System.out.println(this.name+" ОПЯТЬ ПРОДОЛЖАЮТ РАССЛЕДОВАНИЕ (сколько можно то уже)");
-                break;
-        }
-    }
+
     public void catchs(String catched){
         System.out.println(this.name+" поймали "+catched);
     }

@@ -12,5 +12,12 @@ public class humanGruop extends Entity implements ALive{
         public void watch(){
                 System.out.println(this.name+" смотрят со стороны");
         }
-
+        @Override
+        public State getState(){
+                return this.state;
+        }
+        @Override
+        public void setState(State state){
+                this.state = state;
+        }
 }

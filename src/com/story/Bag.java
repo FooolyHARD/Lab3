@@ -8,4 +8,8 @@ public class Bag extends Entity implements NotALive{
     @Override
     public void exist(){
     }
+    @Override
+    public void setState(State state){
+        System.out.println("Невозможно изменить STAT объекта");
+    }
 }

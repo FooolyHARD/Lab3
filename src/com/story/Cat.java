@@ -9,4 +9,9 @@ public class Cat extends Entity implements NotALive{
     public void exist(){
         System.out.println("Был найден "+this.name+" с параметром "+this.state);
     }
+    @Override
+    public void setState(State state){
+        System.out.println("Невозможно изменить STAT объекта");
+    }
+
 }

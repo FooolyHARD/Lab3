@@ -8,4 +8,12 @@ public class Bankir extends Entity implements ALive{
     public void say(String toWho, String phrase){
         System.out.println(this.name+" говорит "+toWho+" "+phrase);
     }
+    @Override
+    public State getState(){
+        return this.state;
+    }
+    @Override
+    public void setState(State state){
+        this.state = state;
+    }
 }

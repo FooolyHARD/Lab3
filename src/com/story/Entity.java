@@ -1,6 +1,7 @@
 //Entity.java
 package com.story;
-
+//Abstract to alll
+//Испаользовать абстрацкию как интерфейс
 public abstract class Entity{
     protected final String name;
     public State state;
@@ -9,9 +10,8 @@ public abstract class Entity{
         this.state = state;
     }
     public State getState(){
-        return state;
+        return this.state;
     }
-    public void setState(State state) {
-        this.state = state;
-    }
+    public abstract void setState(State state);
 }
+
